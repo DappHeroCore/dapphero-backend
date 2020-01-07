@@ -1,0 +1,38 @@
+{
+  "name": "dapphero-backend",
+  "version": "1.0.0",
+  "description": "DappHero Backend",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DappHeroCore/dapphero-backend.git"
+  },
+  "author": "DappHero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DappHeroCore/dapphero-backend/issues"
+  },
+  "homepage": "https://github.com/DappHeroCore/dapphero-backend#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "typescript": "^3.7.4",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.4",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-import": "^0.13.0",
+    "jest": "^24.9.0"
+  }
+}
