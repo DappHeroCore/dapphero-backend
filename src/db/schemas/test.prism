@@ -1,0 +1,7 @@
+type User {
+  id: String!
+  title: String!
+  publishedAt: DateTime!
+  likes: Int! @default(value: 0)
+  blog: Blog @relation(name: "Posts")
+}
