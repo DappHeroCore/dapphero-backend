@@ -4,6 +4,7 @@
   "description": "DappHero Backend",
   "main": "app.ts",
   "scripts": {
+    "start": "ts-node src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/DappHeroCore/dapphero-backend#readme",
   "dependencies": {
+    "@playlyfe/gql": "^2.6.2",
     "dotenv": "^8.2.0",
+    "eslint-plugin-import": "^2.19.1",
     "express": "^4.17.1",
     "typescript": "^3.7.4",
     "winston": "^3.2.1"
@@ -33,6 +36,8 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-import": "^0.13.0",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.5.4"
   }
 }

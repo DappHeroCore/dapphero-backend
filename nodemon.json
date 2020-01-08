@@ -1,0 +1,1 @@
+{ "watch": ["**/*.ts"], "ignore": ["src/**/*.spec.ts"], "exec": "node ./src/main.ts" }

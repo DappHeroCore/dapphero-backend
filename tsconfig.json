@@ -15,7 +15,7 @@
 		"isolatedModules": true,
 		// Import non-ES modules as default imports.
 		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": false,
+		"allowSyntheticDefaultImports": true,
     "module": "commonjs",
 		"baseUrl": "./src",
 		"paths": {
