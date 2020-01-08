@@ -1,10 +1,10 @@
 import express from 'express'
-import { mappingsRouter } from './routes'
+import * as routes from './routes'
 
 const app = express()
 const PORT = 5001
 
-app.use('/mappings', mappingsRouter)
+app.use('/mappings', routes.mappings)
 
 app.get('/some-other-route', (req, res) => {
   const response = { someKey: 'someValue' }
