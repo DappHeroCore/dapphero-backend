@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany } from 'typeorm'
+import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm'
 import { BaseEntity } from './BaseEntity'
 import { Account } from './Account'
 import { User } from './User'
@@ -15,14 +15,15 @@ export class Project extends BaseEntity {
   @Column()
   name: string
 
-  @Column()
+  @OneToOne(() => User, user => user)
   owner: string
 
-  @OneToMany(type => User, user => user.project)
-  admins: User[]
+  @ManyToOne((type) => Account, (accounts) => accounts.projects)
+  acountId: number
 
-  @ManyToOne(type => Account, accounts => )
-  acount
+  @Column()
+  screenShotUri: string
+
   @Column({
     type: 'enum',
     enum: [ 'admin', 'editor', 'ghost' ],
