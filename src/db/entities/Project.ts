@@ -1,7 +1,11 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm'
-import { BaseEntity } from './BaseEntity'
+/*eslint-disable import/no-cycle */
+import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm'
 import { Account } from './Account'
+import { BaseEntity } from './BaseEntity'
+import { EthContractInstance } from './EthContractInstance'
+import { Feature } from './Feature'
 import { User } from './User'
+import { ProjectSubscription } from './ProjectSubscription'
 
 @Entity()
 export class Project extends BaseEntity {
@@ -9,25 +13,27 @@ export class Project extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column('text')
   url: string
 
-  @Column()
+  @Column('text')
   name: string
 
-  @OneToOne(() => User, user => user)
-  owner: string
-
-  @ManyToOne((type) => Account, (accounts) => accounts.projects)
-  acountId: number
-
-  @Column()
+  @Column('text')
   screenShotUri: string
 
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
+  @OneToOne(() => User)
+  owner: User
+
+  @ManyToOne((type) => Account, (account) => account.projects)
+  account: Account
+
+  @OneToMany((type) => ProjectSubscription, (projectSubscription) => projectSubscription.project)
+  subscriptions: ProjectSubscription
+
+  @ManyToMany((type) => EthContractInstance)
+  ethContractInstances: EthContractInstance[]
+
+  @ManyToMany((type) => Feature)
+  features: Feature[]
 }

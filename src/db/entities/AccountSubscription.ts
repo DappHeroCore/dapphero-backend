@@ -1,6 +1,7 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany } from 'typeorm'
-import { BaseEntity } from './BaseEntity'
+/*eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { Account } from './Account'
+import { BaseEntity } from './BaseEntity'
 
 @Entity()
 export class AccountSubscription extends BaseEntity {
@@ -9,7 +10,7 @@ export class AccountSubscription extends BaseEntity {
   id: number
 
   @ManyToOne((type) => Account, (account) => account.subscriptions)
-  accountID: number[]
+  account: number[]
 
   @Column({
     type: 'enum',

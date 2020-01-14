@@ -1,5 +1,9 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany } from 'typeorm'
+/*eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
+import { AccountSubscription } from './AccountSubscription'
 import { BaseEntity } from './BaseEntity'
+import { Project } from './Project'
+import { User } from './User'
 
 @Entity()
 export class Account extends BaseEntity {
@@ -7,17 +11,15 @@ export class Account extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column('text')
   name: string
 
-  subscriptions: any[]
+  @OneToMany((type) => User, (user) => user.account)
+  users: AccountSubscription[]
 
-  projects: any[]
+  @OneToMany((type) => AccountSubscription, (subscription) => subscription.account)
+  subscriptions: AccountSubscription[]
 
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
+  @OneToMany((type) => Project, (project) => project.account)
+  projects: Project[]
 }
