@@ -1,5 +1,5 @@
-/*eslint-disable import/no-cycle */
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
+/* eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm'
 import { AccountSubscription } from './AccountSubscription'
 import { BaseEntity } from './BaseEntity'
 import { Project } from './Project'
@@ -22,4 +22,8 @@ export class Account extends BaseEntity {
 
   @OneToMany((type) => Project, (project) => project.account)
   projects: Project[]
+
+  @OneToOne((type) => User)
+  @JoinColumn()
+  owner: User
 }

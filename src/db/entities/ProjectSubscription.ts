@@ -8,6 +8,9 @@ export class ProjectSubscription extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column('text')
+  name: string
+
   @ManyToOne((type) => Project, (project) => project.subscriptions)
   project: Project
 }

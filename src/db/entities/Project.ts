@@ -22,6 +22,12 @@ export class Project extends BaseEntity {
   @Column('text')
   screenShotUri: string
 
+  @ManyToMany(() => User, (user) => user.projects)
+  users: User
+
+  @ManyToMany(() => User)
+  admins: User[]
+
   @OneToOne(() => User)
   owner: User
 

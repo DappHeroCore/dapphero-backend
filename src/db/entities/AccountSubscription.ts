@@ -9,13 +9,9 @@ export class AccountSubscription extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column('text')
+  name: string
+
   @ManyToOne((type) => Account, (account) => account.subscriptions)
   account: number[]
-
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
 }

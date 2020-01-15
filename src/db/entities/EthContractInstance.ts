@@ -21,4 +21,7 @@ export class EthContractInstance extends BaseEntity {
 
   @ManyToMany((type) => Project, (project) => project.ethContractInstances)
   projects: Project[]
+
+  @Column('jsonb')
+  abi: any[] & {[key: string]: any}
 }

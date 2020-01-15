@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm'
+import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, ManyToMany } from 'typeorm'
 import { Account } from './Account'
 import { BaseEntity } from './BaseEntity'
-import { Wallet } from './Wallet'
-import { UserUrl } from './UserUrl'
+import { BlockchainIdentity } from './BlockchainIdentityt'
+import { Project } from './Project'
 
 @Entity()
 export class User extends BaseEntity {
@@ -23,11 +23,11 @@ export class User extends BaseEntity {
   @ManyToOne((type) => Account, (account) => account.users)
   account: Account
 
-  @OneToMany((type) => Wallet, (wallet) => wallet.user)
-  wallets: Wallet[]
+  @ManyToMany((type) => Project, (project) => project.users)
+  projects: Project[]
 
-  @OneToMany((type) => UserUrl, (userUrl) => userUrl.user)
-  userUrls: UserUrl[]
+  @OneToMany((type) => BlockchainIdentity, (blockchainIdentity) => blockchainIdentity.user)
+  blockchainIdentities: BlockchainIdentity[]
 
   @Column({
     type: 'enum',

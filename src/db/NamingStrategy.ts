@@ -6,7 +6,7 @@ import { RandomGenerator } from 'typeorm/util/RandomGenerator'
 /**
  * Naming strategy that is used by default.
  */
-export class DefaultNamingStrategy implements NamingStrategyInterface {
+export default class DefaultNamingStrategy implements NamingStrategyInterface {
 
   /**
      * Normalizes table name.
