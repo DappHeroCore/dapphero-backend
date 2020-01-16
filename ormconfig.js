@@ -2,7 +2,7 @@ const DefaultNamingStrategy = require('./NamingStrategy').default
 
 module.exports = {
   type: 'postgres',
-  host: 'aaykk7c7p8g0cw.cx5grrtqaau8.us-east-2.rds.amazonaws.com',
+  host: 'localhost',
   port: 5432,
   username: 'rootroot',
   password: 'rootroot',
