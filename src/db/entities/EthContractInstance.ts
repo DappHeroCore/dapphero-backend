@@ -19,8 +19,8 @@ export class EthContractInstance extends BaseEntity {
   @ManyToOne((type) => Blockchain)
   blockchain: Blockchain
 
-  @ManyToMany((type) => Project, (project) => project.ethContractInstances)
-  projects: Project[]
+  @ManyToOne((type) => Project, (project) => project.ethContractInstances)
+  project: Project
 
   @Column('jsonb')
   abi: any[] & {[key: string]: any}

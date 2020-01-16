@@ -37,7 +37,7 @@ export class Project extends BaseEntity {
   @OneToMany((type) => ProjectSubscription, (projectSubscription) => projectSubscription.project)
   subscriptions: ProjectSubscription
 
-  @ManyToMany((type) => EthContractInstance)
+  @OneToMany((type) => EthContractInstance, (ethContractInstance) => ethContractInstance.project)
   ethContractInstances: EthContractInstance[]
 
   @ManyToMany((type) => Feature)
