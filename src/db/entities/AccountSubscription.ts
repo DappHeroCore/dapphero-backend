@@ -1,20 +1,23 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany } from 'typeorm'
+/*eslint-disable import/no-cycle */
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm'
 import { BaseEntity } from './BaseEntity'
-import { Account } from './Account'
+import { Account } from './Account';
 
 @Entity()
 export class AccountSubscription extends BaseEntity {
-
   @PrimaryGeneratedColumn()
-  id: number
+  public id: number
 
-  @ManyToOne((type) => Account, (account) => account.subscriptions)
-  accountID: number[]
+  @Column({ type: 'text' })
+  name: string
 
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
+  @ManyToOne(
+    type => Account,
+    account => account.subscriptions
+  )
+  account: number[]
+
+  public toString(): string {
+    return `${this.id} - ${this.name}`
+  }
 }

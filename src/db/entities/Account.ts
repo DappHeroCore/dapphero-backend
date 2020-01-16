@@ -1,23 +1,50 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany } from 'typeorm'
+/*eslint-disable import/no-cycle */
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn
+} from 'typeorm'
+import { IsNotEmpty } from 'class-validator'
 import { BaseEntity } from './BaseEntity'
+import { User } from './User'
+import { AccountSubscription } from './AccountSubscription'
+import { Project } from './Project'
 
 @Entity()
 export class Account extends BaseEntity {
-
   @PrimaryGeneratedColumn()
-  id: number
+  public id: number
 
-  @Column()
-  name: string
+  @IsNotEmpty()
+  @Column({ type: 'text' })
+  public name: string
 
-  subscriptions: any[]
+  @OneToMany(
+    type => User,
+    user => user.account
+  )
+  public users: User[]
 
-  projects: any[]
+  @OneToMany(
+    type => AccountSubscription,
+    subscription => subscription.account
+  )
+  public subscriptions: AccountSubscription[]
 
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
+  @OneToMany(
+    type => Project,
+    project => project.account
+  )
+  public projects: Project[]
+
+  @OneToOne(type => User)
+  @JoinColumn()
+  public owner: User
+
+  public toString(): string {
+    return `${this.id} - ${this.name}`
+  }
 }

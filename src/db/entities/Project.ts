@@ -1,33 +1,77 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, VersionColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm'
+/*eslint-disable import/no-cycle */
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+} from 'typeorm'
+import { IsNotEmpty } from 'class-validator'
 import { BaseEntity } from './BaseEntity'
 import { Account } from './Account'
 import { User } from './User'
+import { EthContractInstance } from './EthContractInstance'
+import { ProjectSubscription } from './ProjectSubscription'
+import { Feature } from './Feature'
 
 @Entity()
 export class Project extends BaseEntity {
-
   @PrimaryGeneratedColumn()
-  id: number
+  public id: number
 
-  @Column()
-  url: string
+  @Column({ type: 'text', nullable: true })
+  public url: string
 
-  @Column()
-  name: string
+  @IsNotEmpty()
+  @Column({ type: 'text', nullable: false })
+  public name: string
 
-  @OneToOne(() => User, user => user)
-  owner: string
+  @Column({ type: 'text', nullable: true })
+  public screenShotUri: string
 
-  @ManyToOne((type) => Account, (accounts) => accounts.projects)
-  acountId: number
+  @ManyToMany(
+    type => User,
+    user => user.projects
+  )
+  @JoinTable()
+  public users: User[]
 
-  @Column()
-  screenShotUri: string
+  @ManyToMany(type => User)
+  @JoinTable()
+  public admins: User[]
 
-  @Column({
-    type: 'enum',
-    enum: [ 'admin', 'editor', 'ghost' ],
-    default: 'ghost'
-  })
-role: 'admin' | 'editor' | 'ghost'
+  @ManyToOne(type => Account)
+  @Column({ name: 'account_id' })
+  public accountId: number
+
+  @ManyToOne(type => User, user => user.projects)
+  public owner: User
+
+  @ManyToOne(
+    type => Account,
+    account => account.projects
+  )
+  public account: Account
+
+  @OneToMany(
+    type => ProjectSubscription,
+    projectSubscription => projectSubscription.project
+  )
+  public subscriptions: ProjectSubscription
+
+  @OneToMany(
+    type => EthContractInstance,
+    ethContractInstance => ethContractInstance.projects
+  )
+  public ethContractInstances: EthContractInstance[]
+
+  @ManyToMany(type => Feature)
+  @JoinTable()
+  public features: Feature[]
+
+  public toString(): string {
+    return `${this.id} - ${this.name}`
+  }
 }
