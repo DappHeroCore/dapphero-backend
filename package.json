@@ -7,6 +7,7 @@
     "start": "ts-node src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.ts",
+    "postgres:build": "docker-compose -f ./docker/docker-compose.yml up -d"
   },
   "repository": {
     "type": "git",
