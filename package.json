@@ -18,12 +18,9 @@
   },
   "homepage": "https://github.com/DappHeroCore/dapphero-backend#readme",
   "dependencies": {
-    "@playlyfe/gql": "^2.6.2",
     "dotenv": "^8.2.0",
-    "eslint-plugin-import": "^2.19.1",
     "express": "^4.17.1",
     "pg": "^7.17.1",
-    "sha.js": "^2.4.11",
     "typeorm": "^0.2.22",
     "typescript": "^3.7.4",
     "winston": "^3.2.1"
@@ -40,6 +37,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-import": "^0.13.0",
     "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.19.1",
     "jest": "^24.9.0",
     "nodemon": "^2.0.2",
     "ts-node": "^8.5.4"
