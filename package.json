@@ -22,11 +22,14 @@
   "dependencies": {
     "@playlyfe/gql": "^2.6.2",
     "body-parser": "^1.19.0",
+    "class-transformer": "^0.2.3",
     "class-validator": "^0.9.1",
     "dotenv": "^8.2.0",
     "eslint-plugin-import": "^2.19.1",
     "express": "^4.17.1",
     "pg": "^7.17.1",
+    "routing-controllers": "^0.8.0",
+    "typedi": "^0.8.0",
     "typeorm": "^0.2.22",
     "typescript": "^3.7.4",
     "winston": "^3.2.1"

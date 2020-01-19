@@ -1,14 +1,24 @@
-import App from './App';
+import "reflect-metadata"
+import { useExpressServer } from "routing-controllers"
 import * as dotenv from "dotenv"
-import ProjectController from './controllers/ProjectController';
-import AccountController from './controllers/AccountController';
-import UserController from './controllers/UserController';
-
+import { UserController } from "./controllers/UserController"
+import { AccountController } from "./controllers/AccountController"
+import { createConnection } from "typeorm"
+import bodyParser = require("body-parser")
+import express = require("express")
 dotenv.config()
-const controllers = [new ProjectController(), new AccountController(), new UserController()]
-// TODO: Modify PORT to be an Env Variable 
-const app = new App(controllers, 5001);
 
-app.listen();
+const controllers = [AccountController, UserController]
+const server = express()
 
-export default app;
+server.use(bodyParser.json())
+server.use(bodyParser.urlencoded({ extended: true }))
+
+createConnection()
+  .then(async connection => {
+    useExpressServer(server, {
+      controllers: controllers
+    }).listen(5001)
+    console.log("Server is up and running on port 5001.")
+  })
+  .catch(error => console.log("Error: ", error))

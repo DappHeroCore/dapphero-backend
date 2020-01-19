@@ -1,83 +1,54 @@
-import * as express from "express"
+import {
+  JsonController,
+  Get,
+  Post as HttpPost,
+  Param,
+  Delete,
+  Body,
+  Post,
+  Req,
+  Res
+} from "routing-controllers"
+import { Service } from "typedi"
 import { User } from "../db/entities/User"
-import { getManager } from "typeorm"
-import { validate } from "class-validator";
+import { Request, Response } from "express"
+import { UserService } from "../services/UserService"
 
-class UserController {
-  public path = "/users"
-  public router: express.Router = express.Router()
+@Service()
+@JsonController()
+export class UserController {
+  private userService: UserService
 
   constructor() {
-    this.initializeRoutes()
+    this.userService = new UserService()
   }
 
-  public initializeRoutes() {
-    this.router.get(this.path, this.getAll)
-    this.router.get(this.path + "/:id", this.getOne)
-    this.router.post(this.path, this.create)
-    this.router.put(this.path + "/:id", this.update)
-    this.router.delete(this.path + "/:id", this.delete)
+  @Get("/users")
+  all() {
+    return this.userService.find()
   }
 
-  public async getAll(req: express.Request, res: express.Response) {
-    const userManager = getManager().getRepository(User)
-    const users = await userManager.find()
-    return res.send(users)
+  @Post("/users")
+  async post(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Body() user: User
+  ) {
+    console.log("user: ", user)
+    return this.userService.create(user)
   }
 
-  public async getOne(req: express.Request, res: express.Response) {
-    const userManager = getManager().getRepository(User)
-    const user = await userManager.findOne(req.params.id)
-    return res.send(user)
+  @Get("/users/:id")
+  async one(@Param("id") id: number) {
+    console.log(
+      "this.accountService.findOne(id): ",
+      await this.userService.findOne(id)
+    )
+    return await this.userService.findOne(id)
   }
 
-  public async create(req: express.Request, res: express.Response) {
-     //Get parameters from the body
-     let { firstName, lastName, email, authType } = req.body
-     //TODO: we should be getting the user from the JWT Middleware
- 
-     let user: User = new User()
-     user.firstName = firstName
-     user.lastName = lastName
-     user.email = email
-     user.authType = authType
-
-     //Validate that User parameters are ok
-     const errors = await validate(user)
-     if (errors.length > 0) {
-       res.status(400).send(errors)
-       return
-     }
- 
-     //Try to save or fail
-     const userRepository = getManager().getRepository(User)
-     try {
-       await userRepository.save(user)
-     } catch (e) {
-       res.status(409).send(`User couldn't be created: ${e}`)
-       return
-     }
- 
-     //It's all ok, send 201 response
-     return res.status(201).send(user)
-  }
-
-  public async update(req: express.Request, res: express.Response) {
-    const userManager = getManager().getRepository(User)
-    const user = await userManager.findOne(req.params.id)
-    if (user !== undefined) {
-      await userManager.update(req.params.id, req.body)
-      return res.status(200).send({ message: "User updated correctly" })
-    }
-
-    return res.status(404).send({ message: "User not found" })
-  }
-
-  public async delete(req: express.Request, res: express.Response) {
-    const userManager = getManager().getRepository(User)
-    userManager.delete(req.params.id)
-    return res.status(200).send({ message: "User deleted successfully" })
-  }
+  /*     @Delete("/posts/:id")
+    delete(@Param("id") id: number): Account {
+        return this.accountService.remove(id);
+    } */
 }
-
-export default UserController
