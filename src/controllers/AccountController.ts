@@ -43,12 +43,8 @@ export class AccountController {
     return this.accountService.create(account, user)
   }
 
-  @Get("/:id")
+  @Get("/accounts/:id")
   async one(@Param("id") id: number) {
-    console.log(
-      "this.accountService.findOne(id): ",
-      await this.accountService.findOne(id)
-    )
     return await this.accountService.findOne(id)
   }
 

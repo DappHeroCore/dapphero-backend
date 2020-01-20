@@ -34,16 +34,11 @@ export class UserController {
     @Res() response: Response,
     @Body() user: User
   ) {
-    console.log("user: ", user)
     return this.userService.create(user)
   }
 
   @Get("/users/:id")
   async one(@Param("id") id: number) {
-    console.log(
-      "this.accountService.findOne(id): ",
-      await this.userService.findOne(id)
-    )
     return await this.userService.findOne(id)
   }
 

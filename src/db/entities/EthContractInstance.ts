@@ -20,7 +20,7 @@ export class EthContractInstance extends BaseEntity {
   @Column({ name: 'address' })
   public address: string
 
-  @Column({ type: 'boolean', name: 'is_live' })
+  @Column({ type: 'boolean', name: 'is_live', nullable: true })
   public isLive: boolean
 
   @ManyToOne(type => Blockchain)
@@ -30,7 +30,7 @@ export class EthContractInstance extends BaseEntity {
   @IsNotEmpty()
   @ManyToOne(type => Project, project => project.ethContractInstances)
   @JoinColumn({ name: 'project_id' })
-  public projects: Project
+  public project: Project
 
   @Column('jsonb')
   abi: any[] & { [key: string]: any }

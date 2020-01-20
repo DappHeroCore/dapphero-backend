@@ -15,7 +15,6 @@ export class AccountService {
   //@Logger(__filename) private log: LoggerInterface)
   {
     this.accountRepository = getCustomRepository(AccountRepository)
-    console.log('this.accountRepository: ', this.accountRepository);
   }
 
   public find(): Promise<Account[]> {
@@ -33,10 +32,8 @@ export class AccountService {
   }
 
   public async create(newAccount: Account, user: User): Promise<Account> {
-    const account = new Account()
-    account.name = newAccount.name
-    account.owner = user
-    return await this.accountRepository.save(account)
+    newAccount.owner = user
+    return await this.accountRepository.save(newAccount)
   }
 
   public async update(
@@ -48,7 +45,7 @@ export class AccountService {
     if (!(objAccount.owner.id === userId)) {
       throw new HttpError(
         403,
-        "User do not have the permission to update Account"
+        "User does not have permissions to update this Account"
       )
     }
 

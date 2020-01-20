@@ -63,7 +63,7 @@ export class Project extends BaseEntity {
 
   @OneToMany(
     type => EthContractInstance,
-    ethContractInstance => ethContractInstance.projects
+    ethContractInstance => ethContractInstance.project
   )
   public ethContractInstances: EthContractInstance[]
 

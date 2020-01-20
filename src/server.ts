@@ -1,14 +1,24 @@
+import * as dotenv from "dotenv"
 import "reflect-metadata"
 import { useExpressServer } from "routing-controllers"
-import * as dotenv from "dotenv"
-import { UserController } from "./controllers/UserController"
-import { AccountController } from "./controllers/AccountController"
 import { createConnection } from "typeorm"
+import { AccountController } from "./controllers/AccountController"
+import { BlockchainController } from "./controllers/BlockchainController"
+import { EthContractController } from "./controllers/EthContractController"
+import { ProjectController } from "./controllers/ProjectController"
+import { UserController } from "./controllers/UserController"
 import bodyParser = require("body-parser")
 import express = require("express")
+
 dotenv.config()
 
-const controllers = [AccountController, UserController]
+const controllers = [
+  ProjectController,
+  AccountController,
+  UserController,
+  EthContractController,
+  BlockchainController
+]
 const server = express()
 
 server.use(bodyParser.json())

@@ -5,21 +5,23 @@ import {
   Column,
   OneToMany,
   OneToOne,
-  JoinColumn
-} from 'typeorm'
-import { IsNotEmpty } from 'class-validator'
-import { BaseEntity } from './BaseEntity'
-import { User } from './User'
-import { AccountSubscription } from './AccountSubscription'
-import { Project } from './Project'
+  JoinColumn,
+  Unique
+} from "typeorm"
+import { IsNotEmpty } from "class-validator"
+import { BaseEntity } from "./BaseEntity"
+import { User } from "./User"
+import { AccountSubscription } from "./AccountSubscription"
+import { Project } from "./Project"
 
 @Entity()
+@Unique(["name"])
 export class Account extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number
 
   @IsNotEmpty()
-  @Column({ type: 'text' })
+  @Column({ type: "text" })
   public name: string
 
   @OneToMany(

@@ -4,7 +4,8 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  ManyToMany
+  ManyToMany,
+  Unique
 } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
 import { IsNotEmpty, IsEmail } from "class-validator"
@@ -17,6 +18,7 @@ import { BlockchainIdentity } from "./BlockchainIdentity"
     id: "DESC"
   }
 })
+@Unique(["email"])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number

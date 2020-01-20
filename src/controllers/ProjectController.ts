@@ -1,83 +1,59 @@
-import * as express from "express"
+import {
+  JsonController,
+  Get,
+  Post,
+  Param,
+  Body,
+  Req,
+  Res,
+  HttpError,
+  BodyParam
+} from "routing-controllers"
+import { Service } from "typedi"
 import { Project } from "../db/entities/Project"
-import { getManager } from "typeorm"
-import { validate } from "class-validator";
+import { ProjectService } from "../services/ProjectService"
+import { UserService } from "../services/UserService"
+import { AccountService } from "../services/AccountService"
+import { EthContractInstance } from "/db/entities/EthContractInstance"
 
-class ProjectController {
-  public path = "/projects"
-  public router: express.Router = express.Router()
+@Service()
+@JsonController()
+export class ProjectController {
+  private projectService: ProjectService
+  private userService: UserService
+  private accountService: AccountService
 
   constructor() {
-    this.initializeRoutes()
+    this.projectService = new ProjectService()
+    this.userService = new UserService()
+    this.accountService = new AccountService()
   }
 
-  public initializeRoutes() {
-    this.router.get(this.path, this.getAll)
-    this.router.get(this.path + "/:id", this.getOne)
-    this.router.post(this.path, this.create)
-    this.router.put(this.path + "/:id", this.update)
-    this.router.delete(this.path + "/:id", this.delete)
+  @Get("/projects")
+  all() {
+    return this.projectService.find()
   }
 
-  public async getAll(req: express.Request, res: express.Response) {
-    const projectManager = getManager().getRepository(Project)
-    const projects = await projectManager.find()
-    return res.send(projects)
-  }
-
-  public async getOne(req: express.Request, res: express.Response) {
-    const projectManager = getManager().getRepository(Project)
-    const project = await projectManager.findOne(req.params.id)
-    return res.send(project)
-  }
-
-  public async create(req: express.Request, res: express.Response) {
-     //Get parameters from the body
-     let { url, name, screenShotUri, accountId } = req.body
-     //TODO: we should be getting the user from the JWT Middleware
- 
-     let project: Project = new Project()
-     project.url = url
-     project.name = name
-     project.screenShotUri = screenShotUri
-     project.accountId = accountId
-
-     //Validate that Project parameters are ok
-     const errors = await validate(project)
-     if (errors.length > 0) {
-       res.status(400).send(errors)
-       return
-     }
- 
-     //Try to save or fail
-     const projectRepository = getManager().getRepository(Project)
-     try {
-       await projectRepository.save(project)
-     } catch (e) {
-       res.status(409).send(`Project couldn't be created: ${e}`)
-       return
-     }
- 
-     //It's all ok, send 201 response
-     return res.status(201).send(project)
-  }
-
-  public async update(req: express.Request, res: express.Response) {
-    const projectManager = getManager().getRepository(Project)
-    const project = await projectManager.findOne(req.params.id)
-    if (project !== undefined) {
-      await projectManager.update(req.params.id, req.body)
-      return res.status(200).send({ message: "Project updated correctly" })
+  @Post("/projects")
+  async post(
+    @Body() project: Project,
+    @BodyParam("userId", { required: true }) userId: number,
+    @BodyParam("accountId", { required: true }) accountId: number
+  ) {
+    // TODO: this user should be user detected via Middleware
+    const user = await this.userService.findOne(userId)
+    if (!user) {
+      throw new HttpError(404, "User not found!")
     }
-
-    return res.status(404).send({ message: "Project not found" })
+    const account = await this.accountService.findOne(accountId)
+    if (!account) {
+      throw new HttpError(404, "Account not found!")
+    }
+    return this.projectService.create(project, user, account)
   }
 
-  public async delete(req: express.Request, res: express.Response) {
-    const projectManager = getManager().getRepository(Project)
-    projectManager.delete(req.params.id)
-    return res.status(200).send({ message: "Project deleted successfully" })
+  @Get("/projects/:id")
+  async one(@Param("id") id: number) {
+    return await this.projectService.findOne(id)
   }
 }
-
-export default ProjectController
