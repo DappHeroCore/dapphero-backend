@@ -3,15 +3,16 @@ import {
   Post,
   Param,
   Body,
-  HttpError,
   BodyParam,
-  Get
+  Get,
+  NotFoundError
 } from "routing-controllers"
 import { Service } from "typedi"
-import { ProjectService } from "../services/ProjectService"
 import { UserService } from "../services/UserService"
 import { EthContractInstance } from "../db/entities/EthContractInstance"
 import { EthContractService } from "../services/EthContractService"
+import { DbError } from "./errors/DbError";
+import { UserNotFoundError } from "./errors/UserNotFoundError";
 
 @Service()
 @JsonController()
@@ -29,6 +30,13 @@ export class EthContractController {
     return this.ethContractService.find()
   }
 
+  @Get("/ethcontracts/:id")
+  async one(@Param("id") id: number) {
+    const contract = await this.ethContractService.findOne(id)
+    if (!contract) throw new NotFoundError(`Contract was not found.`)
+    return contract
+  }
+
   @Post("/projects/:id/ethcontracts")
   async post(
     @Body() contract: EthContractInstance,
@@ -37,9 +45,15 @@ export class EthContractController {
     // TODO: this user should be user detected via Middleware
     const user = await this.userService.findOne(userId)
     if (!user) {
-      throw new HttpError(404, "User not found!")
+      throw new UserNotFoundError()
     }
     // TODO: Check if user has the permissions to create a contract in this project
-    return this.ethContractService.create(contract)
+    let newContract
+    try {
+      newContract = await this.ethContractService.create(contract)
+    } catch (e) {
+      throw new DbError(e)
+    }
+    return newContract
   }
 }

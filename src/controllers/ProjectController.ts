@@ -4,9 +4,6 @@ import {
   Post,
   Param,
   Body,
-  Req,
-  Res,
-  HttpError,
   BodyParam
 } from "routing-controllers"
 import { Service } from "typedi"
@@ -14,7 +11,8 @@ import { Project } from "../db/entities/Project"
 import { ProjectService } from "../services/ProjectService"
 import { UserService } from "../services/UserService"
 import { AccountService } from "../services/AccountService"
-import { EthContractInstance } from "/db/entities/EthContractInstance"
+import { UserNotFoundError } from "./errors/UserNotFoundError";
+import { AccountNotFoundError } from "./errors/AccountNotFoundError";
 
 @Service()
 @JsonController()
@@ -43,11 +41,11 @@ export class ProjectController {
     // TODO: this user should be user detected via Middleware
     const user = await this.userService.findOne(userId)
     if (!user) {
-      throw new HttpError(404, "User not found!")
+      throw new UserNotFoundError()
     }
     const account = await this.accountService.findOne(accountId)
     if (!account) {
-      throw new HttpError(404, "Account not found!")
+      throw new AccountNotFoundError()
     }
     return this.projectService.create(project, user, account)
   }
