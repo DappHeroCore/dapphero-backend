@@ -8,7 +8,7 @@
     "start:dev": "./node_modules/nodemon/bin/nodemon.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.ts",
-    "postgres:build": "docker-compose -f ./docker/docker-compose.yml up -d"
+    "postgres:up": "docker run --name dapphero-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=dapphero postgres:11"
   },
   "repository": {
     "type": "git",
