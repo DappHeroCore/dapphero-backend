@@ -1,15 +1,17 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Initial1579488511460 implements MigrationInterface {
-    name = 'Initial1579488511460'
+export class Initial1579705644083 implements MigrationInterface {
+    name = 'Initial1579705644083'
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TABLE "blockchain_identity" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "public_key" character varying NOT NULL, "user_id" integer, "blockchain_id" integer, CONSTRAINT "PK_e5c72d8cc59ff95befc47d79a80" PRIMARY KEY ("id"))`, undefined);
+        await queryRunner.query(`CREATE TYPE "blockchain_protocol_enum" AS ENUM('ethereum', 'bitcoin')`, undefined);
         await queryRunner.query(`CREATE TABLE "blockchain" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "name" text NOT NULL, "rpcEndpoint" text NOT NULL, "networkID" smallint NOT NULL, "protocol" "blockchain_protocol_enum" NOT NULL, CONSTRAINT "UQ_d89e2e25ee7d2d400e54ab98a13" UNIQUE ("name"), CONSTRAINT "PK_e8d1216086807f2eb4cc145b3a2" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "eth_contract_instance" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "address" character varying NOT NULL, "is_live" boolean, "abi" jsonb NOT NULL, "blockchain_id" integer, "project_id" integer, CONSTRAINT "PK_bb2eebfd90e09b928d937aece4a" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "project_subscription" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "name" text NOT NULL, "projectId" integer, CONSTRAINT "PK_910c551ce3d971c15c9521bc749" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "feature" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "name" text NOT NULL, CONSTRAINT "PK_03930932f909ca4be8e33d16a2d" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "project" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "url" text, "name" text NOT NULL, "screenShotUri" text, "account_id" integer NOT NULL, "accountIdId" integer, "ownerId" integer, "accountId" integer, CONSTRAINT "PK_4d68b1358bb5b766d3e78f32f57" PRIMARY KEY ("id"))`, undefined);
+        await queryRunner.query(`CREATE TYPE "user_authtype_enum" AS ENUM('google', 'github')`, undefined);
         await queryRunner.query(`CREATE TABLE "user" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "first_name" text NOT NULL, "last_name" text NOT NULL, "email" text NOT NULL, "authType" "user_authtype_enum" NOT NULL, "accountId" integer, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "account_subscription" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "name" text NOT NULL, "accountId" integer, CONSTRAINT "PK_08568b4f059808520495b7544f7" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "account" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "entity_version" integer NOT NULL, "id" SERIAL NOT NULL, "name" text NOT NULL, "ownerId" integer, CONSTRAINT "UQ_414d4052f22837655ff312168cb" UNIQUE ("name"), CONSTRAINT "REL_72719f338bfbe9aa98f4439d2b" UNIQUE ("ownerId"), CONSTRAINT "PK_54115ee388cdb6d86bb4bf5b2ea" PRIMARY KEY ("id"))`, undefined);
@@ -71,11 +73,13 @@ export class Initial1579488511460 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "account"`, undefined);
         await queryRunner.query(`DROP TABLE "account_subscription"`, undefined);
         await queryRunner.query(`DROP TABLE "user"`, undefined);
+        await queryRunner.query(`DROP TYPE "user_authtype_enum"`, undefined);
         await queryRunner.query(`DROP TABLE "project"`, undefined);
         await queryRunner.query(`DROP TABLE "feature"`, undefined);
         await queryRunner.query(`DROP TABLE "project_subscription"`, undefined);
         await queryRunner.query(`DROP TABLE "eth_contract_instance"`, undefined);
         await queryRunner.query(`DROP TABLE "blockchain"`, undefined);
+        await queryRunner.query(`DROP TYPE "blockchain_protocol_enum"`, undefined);
         await queryRunner.query(`DROP TABLE "blockchain_identity"`, undefined);
     }
 
