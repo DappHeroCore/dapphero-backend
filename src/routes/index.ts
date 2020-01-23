@@ -1,1 +1,0 @@
-export { mappingsRouter as mappings } from './mappings';
