@@ -27,29 +27,23 @@ export class AccountController {
     this.userService = new UserService()
   }
 
-  @Get("/accounts")
+  @Get("/api/accounts")
   all() {
     return this.accountService.find()
   }
 
-  @Post("/accounts")
+  @Post("/api/accounts")
   async post(
     @Req() request: Request,
     @Res() response: Response,
     @Body() account: Account
   ) {
-    console.log("this.userService: ", this.userService)
     const user: User = await this.userService.findOne(1)
     return this.accountService.create(account, user)
   }
 
-  @Get("/accounts/:id")
+  @Get("/api/accounts/:id")
   async one(@Param("id") id: number) {
     return await this.accountService.findOne(id)
   }
-
-  /*     @Delete("/posts/:id")
-    delete(@Param("id") id: number): Account {
-        return this.accountService.remove(id);
-    } */
 }

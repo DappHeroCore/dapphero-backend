@@ -25,19 +25,19 @@ export class EthContractController {
     this.userService = new UserService()
   }
 
-  @Get("/ethcontracts")
+  @Get("/api/ethcontracts")
   all() {
     return this.ethContractService.find()
   }
 
-  @Get("/ethcontracts/:id")
+  @Get("/api/ethcontracts/:id")
   async one(@Param("id") id: number) {
     const contract = await this.ethContractService.findOne(id)
     if (!contract) throw new NotFoundError(`Contract was not found.`)
     return contract
   }
 
-  @Post("/projects/:id/ethcontracts")
+  @Post("/api/projects/:id/ethcontracts")
   async post(
     @Body() contract: EthContractInstance,
     @BodyParam("userId", { required: true }) userId: number // TODO: remove

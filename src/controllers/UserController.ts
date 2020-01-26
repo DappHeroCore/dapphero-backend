@@ -3,7 +3,6 @@ import {
   Get,
   Post as HttpPost,
   Param,
-  Delete,
   Body,
   Post,
   Req,
@@ -23,12 +22,12 @@ export class UserController {
     this.userService = new UserService()
   }
 
-  @Get("/users")
+  @Get("/api/users")
   all() {
     return this.userService.find()
   }
 
-  @Post("/users")
+  @Post("/api/users")
   async post(
     @Req() request: Request,
     @Res() response: Response,
@@ -37,13 +36,8 @@ export class UserController {
     return this.userService.create(user)
   }
 
-  @Get("/users/:id")
+  @Get("/api/users/:id")
   async one(@Param("id") id: number) {
     return await this.userService.findOne(id)
   }
-
-  /*     @Delete("/posts/:id")
-    delete(@Param("id") id: number): Account {
-        return this.accountService.remove(id);
-    } */
 }

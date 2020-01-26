@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  Generated,
 } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
 import { BaseEntity } from './BaseEntity'
@@ -21,14 +22,14 @@ export class Project extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: "text", nullable: true })
   public url: string
 
   @IsNotEmpty()
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: "text", nullable: false })
   public name: string
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: "text", nullable: true })
   public screenShotUri: string
 
   @ManyToMany(
@@ -43,10 +44,13 @@ export class Project extends BaseEntity {
   public admins: User[]
 
   @ManyToOne(type => Account)
-  @Column({ name: 'account_id' })
+  @Column({ name: "account_id" })
   public accountId: number
 
-  @ManyToOne(type => User, user => user.projects)
+  @ManyToOne(
+    type => User,
+    user => user.projects
+  )
   public owner: User
 
   @ManyToOne(
@@ -70,6 +74,10 @@ export class Project extends BaseEntity {
   @ManyToMany(type => Feature)
   @JoinTable()
   public features: Feature[]
+
+  @Column()
+  @Generated("uuid")
+  secret: string
 
   public toString(): string {
     return `${this.id} - ${this.name}`

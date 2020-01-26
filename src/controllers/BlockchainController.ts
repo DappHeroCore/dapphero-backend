@@ -20,12 +20,12 @@ export class BlockchainController {
     this.blockchainService = new BlockchainService()
   }
 
-  @Get("/blockchains")
+  @Get("/api/blockchains")
   async all() {
     return this.blockchainService.find()
   }
 
-  @Get("/blockchains/:id")
+  @Get("/api/blockchains/:id")
   async one(@Param("id") id: number) {
     const blockchain = await this.blockchainService.findOne(id)
     if (!blockchain) throw new NotFoundError(`Blockchain was not found.`)
@@ -33,7 +33,7 @@ export class BlockchainController {
   }
 
   // TODO: Check for user's permissions
-  @Post("/blockchains")
+  @Post("/api/blockchains")
   async post(@Body() blockchain: Blockchain) {
     let newBlockchain: Blockchain
     try {

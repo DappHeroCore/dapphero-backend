@@ -4,15 +4,18 @@ import {
   Post,
   Param,
   Body,
-  BodyParam
+  BodyParam,
+  Req,
+  Res
 } from "routing-controllers"
 import { Service } from "typedi"
 import { Project } from "../db/entities/Project"
 import { ProjectService } from "../services/ProjectService"
 import { UserService } from "../services/UserService"
 import { AccountService } from "../services/AccountService"
-import { UserNotFoundError } from "./errors/UserNotFoundError";
-import { AccountNotFoundError } from "./errors/AccountNotFoundError";
+import { UserNotFoundError } from "./errors/UserNotFoundError"
+import { AccountNotFoundError } from "./errors/AccountNotFoundError"
+import { Request } from "express"
 
 @Service()
 @JsonController()
@@ -27,12 +30,12 @@ export class ProjectController {
     this.accountService = new AccountService()
   }
 
-  @Get("/projects")
+  @Get("/api/projects")
   all() {
     return this.projectService.find()
   }
 
-  @Post("/projects")
+  @Post("/api/projects")
   async post(
     @Body() project: Project,
     @BodyParam("userId", { required: true }) userId: number,
@@ -50,7 +53,15 @@ export class ProjectController {
     return this.projectService.create(project, user, account)
   }
 
-  @Get("/projects/:id")
+  @Get("/api/projects/getconfig")
+  async getProjectConfig(
+    @Req() request: Request,
+    @BodyParam("secret", { required: true }) secret: string
+  ) {
+    return await this.projectService.getProjectConfig(request.host, secret)
+  }
+
+  @Get("/api/projects/:id")
   async one(@Param("id") id: number) {
     return await this.projectService.findOne(id)
   }

@@ -29,6 +29,15 @@ export class ProjectService {
     })
   }
 
+  public getProjectConfig(url: string, secret: string): Promise<Project | undefined> {
+    return this.projectRepository.findOne(
+      { url, secret },
+      {
+        relations: ["ethContractInstances"]
+      }
+    )
+  }
+
   public async create(
     project: Project,
     user: User,
