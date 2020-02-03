@@ -29,6 +29,7 @@ export class AccountController {
 
   @Get("/api/accounts")
   all() {
+    return 'this worked'
     return this.accountService.find()
   }
 

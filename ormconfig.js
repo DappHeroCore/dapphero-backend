@@ -1,7 +1,4 @@
-const DefaultNamingStrategy = require("./src/db/NamingStrategy").default
-import * as dotenv from "dotenv"
-
-dotenv.config()
+const DefaultNamingStrategy = require("./dist/db/NamingStrategy").default
 
 const config = {
   type: process.env.TORM_CONNECTION,
@@ -21,4 +18,4 @@ const config = {
   }
 }
 
-export = config
+module.exports = { config }
